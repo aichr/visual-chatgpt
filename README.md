@@ -1,73 +1,34 @@
-# Visual ChatGPT 
+# Clean Visual ChatGPT 
 
-**Visual ChatGPT** connects ChatGPT and a series of Visual Foundation Models to enable **sending** and **receiving** images during chatting.
-
-See our paper: [<font size=5>Visual ChatGPT: Talking, Drawing and Editing with Visual Foundation Models</font>](https://arxiv.org/abs/2303.04671)
-
-## Demo 
-<img src="./assets/demo_short.gif" width="750">
-
-##  System Architecture 
-
- 
-<p align="center"><img src="./assets/figure.jpg" alt="Logo"></p>
+A cleaner version of [Visual ChatGPT](https://github.com/microsoft/visual-chatgpt/blob/main/README.md).
 
 
-## Quick Start
+### Changelog
+- remove `assets` folder
+- remove `pytorch_lightning` dependency
+- remove unused imports
+- split the models into `models.py`
+- disable most of the torch models to make it work on a single gpu
+
+### Issue
+gradio can be instantiated, but hit the following error:
 
 ```
-# create a new environment
-conda create -n visgpt python=3.8
-
-# activate the new environment
-conda activate visgpt
-
-#  prepare the basic environments
-pip install -r requirement.txt
-
-# download the visual foundation models
-bash download.sh
-
-# prepare your private openAI private key
-export OPENAI_API_KEY={Your_Private_Openai_Key}
-
-# create a folder to save images
-mkdir ./image
-
-# Start Visual ChatGPT !
-python visual_chatgpt.py
+Traceback (most recent call last):
+  File "/home/tianwei/.local/lib/python3.10/site-packages/gradio/routes.py", line 384, in run_predict
+    output = await app.get_blocks().process_api(
+  File "/home/tianwei/.local/lib/python3.10/site-packages/gradio/blocks.py", line 1032, in process_api
+    result = await self.call_function(
+  File "/home/tianwei/.local/lib/python3.10/site-packages/gradio/blocks.py", line 844, in call_function
+    prediction = await anyio.to_thread.run_sync(
+  File "/home/tianwei/.local/lib/python3.10/site-packages/anyio/to_thread.py", line 31, in run_sync
+    return await get_asynclib().run_sync_in_worker_thread(
+  File "/home/tianwei/.local/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
+    return await future
+  File "/home/tianwei/.local/lib/python3.10/site-packages/anyio/_backends/_asyncio.py", line 867, in run
+    result = context.run(func, *args)
+  File "/home/tianwei/projects/vgpt/vgpt.py", line 284, in run_text
+    self.agent.memory.buffer = cut_dialogue_history(
+  File "pydantic/main.py", line 358, in pydantic.main.BaseModel.__setattr__
+ValueError: "ConversationBufferMemory" object has no field "buffer"
 ```
-
-## GPU memory usage
-Here we list the GPU memory usage of each visual foundation model, one can modify ``self.tools`` with fewer visual foundation models to save your GPU memory:
-
-| Foundation Model        | Memory Usage (MB) |
-|------------------------|-------------------|
-| ImageEditing           | 6667              |
-| ImageCaption           | 1755              |
-| T2I                    | 6677              |
-| canny2image            | 5540              |
-| line2image             | 6679              |
-| hed2image              | 6679              |
-| scribble2image         | 6679              |
-| pose2image             | 6681              |
-| BLIPVQA                | 2709              |
-| seg2image              | 5540              |
-| depth2image            | 6677              |
-| normal2image           | 3974              |
-| InstructPix2Pix        | 2795              |
-
-
-
-## Acknowledgement
-We appreciate the open source of the following projects:
-
-[Hugging Face](https://github.com/huggingface) &#8194;
-[LangChain](https://github.com/hwchase17/langchain) &#8194;
-[Stable Diffusion](https://github.com/CompVis/stable-diffusion) &#8194; 
-[ControlNet](https://github.com/lllyasviel/ControlNet) &#8194; 
-[InstructPix2Pix](https://github.com/timothybrooks/instruct-pix2pix) &#8194; 
-[CLIPSeg](https://github.com/timojl/clipseg) &#8194;
-[BLIP](https://github.com/salesforce/BLIP) &#8194;
-
-
